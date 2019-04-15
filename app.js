@@ -82,7 +82,7 @@ function renderCheckBox(i, j){
   checkBox.id = uniqueID;
   lifeStudyArray.push(uniqueID);
   checkStoredBoxes();
-  lifeStudySection.appendChild(checkBox);
+  numberLabel.appendChild(checkBox);
 }
 
 //Renders label
@@ -95,8 +95,8 @@ function renderLabel(j){
 //Function to create checkboxes and labels for each LS message in a book
 function renderCheckBoxesAndLabel(i){
   for (var j = 0; j < lifeStudyObjectArray[i].number; j++){
-    renderCheckBox(i, j);
     renderLabel(j);
+    renderCheckBox(i, j);
   }
 }
 
