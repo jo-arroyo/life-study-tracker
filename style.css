@@ -49,12 +49,9 @@ aside {
   border: 1px solid blue;
 }
 
-input {
-  /* float: left; */
-}
-
 label {
-  /* float: left; */
-  border: 1px dotted orange;
   margin-right: 1%;
+  width: 50px;
+  display: inline-block;
+  text-align: right;
 }

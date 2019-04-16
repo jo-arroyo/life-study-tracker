@@ -20,8 +20,10 @@ var numberLabel; //Label for checkbox
 var uniqueID; //ID for each LS
 var stringyLS; //String of LS selected to be stored in local storage
 
-var percentage; //The percentage of messages read
+var percentageRead; //The percentage of messages read
+var percentageNotRead; //The percentage of messages not read
 var progressBlurb;
+var blurbText;
 
 /*==============================================
 CONSTRUCTOR FUNCTION
@@ -82,7 +84,7 @@ function renderCheckBox(i, j){
   checkBox.id = uniqueID;
   lifeStudyArray.push(uniqueID);
   checkStoredBoxes();
-  lifeStudySection.appendChild(checkBox);
+  numberLabel.appendChild(checkBox);
 }
 
 //Renders label
@@ -95,8 +97,8 @@ function renderLabel(j){
 //Function to create checkboxes and labels for each LS message in a book
 function renderCheckBoxesAndLabel(i){
   for (var j = 0; j < lifeStudyObjectArray[i].number; j++){
-    renderCheckBox(i, j);
     renderLabel(j);
+    renderCheckBox(i, j);
   }
 }
 
@@ -115,47 +117,38 @@ function renderLS(){
 
 //Function to calculate progress
 function calculateProgress(){
-  percentage = Math.floor(checkedLS.length / lifeStudyArray.length * 100);
-  console.log(percentage + '% read');
+  percentageRead = Math.floor(checkedLS.length / lifeStudyArray.length * 100);
+  percentageNotRead = 100 - percentageRead;
 }
 
 //Function to render progress to page
 function renderProgress(){
   calculateProgress();
+  blurbText = `${checkedLS.length} of ${lifeStudyArray.length}. ${percentageRead}% read.`;
   progressBlurb = document.createElement('p');
-  progressBlurb.textContent = `${checkedLS.length} of ${lifeStudyArray.length}. ${percentage}% read.`;
+  progressBlurb.textContent = blurbText;
   stats.appendChild(progressBlurb);
 }
 
 //Function to update progress when new box clicked
 function updateProgress(){
   calculateProgress();
-  progressBlurb.textContent = `${checkedLS.length} of ${lifeStudyArray.length}. ${percentage}% read.`;
+  progressBlurb.textContent = blurbText;
 }
 
 // Adds pie charts to page (OT, NT, Total?)
 function makeChart(){
-  // var productNamesArray = [];
-  // var productVotesArray = [];
-  // var productPercentageArray = [];
-  // var productShownArray = [];
+  var pieChartLabels = ['Read', 'Not Yet Read'];
+  var pieChartSegments = [percentageRead, percentageNotRead];
 
-  // for(var i = 0; i < allProducts.length; i++){
-  //   productNamesArray.push(allProducts[i].description);
-  //   productVotesArray.push(allProducts[i].timesClicked);
-  //   productPercentageArray.push(100 * allProducts[i].timesClicked / allProducts[i].timesShown);
-  //   productShownArray.push(allProducts[i].timesShown);
-  // }
-
-  var pieChartLabels = ['Read'];
-
-  var ctx = document.getElementById('progress-chart').getContext('2d');
+  var ctx = document.getElementById('progressChart').getContext('2d');
   var progressChart = new Chart(ctx, {
+    type: 'doughnut',
     data: {
       labels: pieChartLabels,
       datasets: [{
-        label: 'Total Read',
-        data: percentage,
+        label: 'Progress',
+        data: pieChartSegments,
         backgroundColor: [
           'rgba(255, 99, 132, 0.4)',
           'rgba(54, 162, 235, 0.4)',
@@ -164,16 +157,12 @@ function makeChart(){
     },
     options: {
       title: {
-        display: true,
-        text: 'Percentage per product'
+        // display: true,
+        // text: 'Progress'
       },
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true,
-            precision: 0
-          }
-        }]
+      legend: {
+        display: 'true',
+        position: 'bottom'
       }
     }
   });
