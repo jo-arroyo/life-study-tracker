@@ -43,10 +43,15 @@ h3 {
 
 aside {
   position: fixed;
+  display: inline-block;
   left: 70%;
   width: 25%;
   padding: 1%;
   border: 1px solid blue;
+}
+
+#charts {
+  top: 30%;
 }
 
 label {
